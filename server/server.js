@@ -3,7 +3,11 @@ const app = express();
 const { graphqlHTTP} = require("express-graphql");
 const bodyParser = require('body-parser');
 const { buildSchema } = require("graphql");
-const expressPlayground = require('graphql-playground-middleware-express').default
+const expressPlayground = require('graphql-playground-middleware-express').default;
+const  mongoose  = require('mongoose');
+
+
+
 
 app.use(bodyParser.json());
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
@@ -34,6 +38,13 @@ app.use(
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, ()=>{
-console.log(`Running running to port ${PORT}`);
-})
+// mongodb+srv://graphqluser:<password>@cluster0.oekzr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+mongoose.connect('mongodb+srv://graphqluser:1477527@cluster0.oekzr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(()=>{
+    app.listen(PORT, ()=>{
+        console.log(`Running running oo port ${PORT}`);
+        })
+}).catch(error=>console.error(error));
+
