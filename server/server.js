@@ -7,7 +7,7 @@ const expressPlayground = require('graphql-playground-middleware-express').defau
 const  mongoose  = require('mongoose');
 
 
-
+const User = require('./models/user');
 
 app.use(bodyParser.json());
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
@@ -19,7 +19,16 @@ app.use(
         hello: String
       }
       type RootMutation {
-          somemutation: String
+          addUser (userInput: UserInput! ): User!
+      }
+      type User {
+        _id: ID!
+        email: String!
+        password: String!
+      }
+      input UserInput {
+        email: String!
+        password: String!
       }
       schema {
           query: RootQuery
@@ -27,6 +36,21 @@ app.use(
       } 
     `),
       rootValue: {
+        addUser: async(arg)=>{
+          try {
+            const user = new User({
+              email: arg.userInput.email,
+              password: arg.userInput.password,
+            })
+            const result = await user.save();
+            return {
+              ...result._doc
+            } 
+
+          } catch (error){
+            throw error;
+          }
+        },
         hello:()=>{
             return "Hello back to you"
         }
