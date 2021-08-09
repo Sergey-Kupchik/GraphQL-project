@@ -44,7 +44,7 @@ mongoose.connect('mongodb+srv://graphqluser:1477527@cluster0.oekzr.mongodb.net/m
     useUnifiedTopology: true,
 }).then(()=>{
     app.listen(PORT, ()=>{
-        console.log(`Running running oo port ${PORT}`);
+        console.log(`Running running on port ${PORT}`);
         })
 }).catch(error=>console.error(error));
 
