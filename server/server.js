@@ -16,7 +16,7 @@ app.use(
     graphqlHTTP({
       schema: buildSchema(`
       type RootQuery {
-        hello: String
+        user (id:ID!): User!
       }
       type RootMutation {
           addUser (userInput: UserInput! ): User!
@@ -36,6 +36,14 @@ app.use(
       } 
     `),
       rootValue: {
+        user:async(arg)=>{
+          try {
+            const user = await User.findOne({_id:arg.id});
+            return {...user._doc};
+          } catch(error){
+            throw error;
+          }
+      },
         addUser: async(arg)=>{
           try {
             const user = new User({
@@ -51,9 +59,6 @@ app.use(
             throw error;
           }
         },
-        hello:()=>{
-            return "Hello back to you"
-        }
       },
       graphiql: true,
     }),
